@@ -1,0 +1,61 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-Time Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        .sensor-data {
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-Time Sensor Dashboard</h1>
+    <div id="connectionStatus">Connecting...</div>
+    <div class="sensor-data">
+        <h3>Temperature: <span id="temperature">-</span>°C</h3>
+        <h3>Humidity: <span id="humidity">-</span>%</h3>
+        <h3>Power Consumption: <span id="powerConsumption">-</span> W</h3>
+    </div>
+
+    <script>
+        // Connect to the WebSocket
+        const socket = io();
+
+        // Connection status elements
+        const connectionStatus = document.getElementById('connectionStatus');
+        const temperatureElem = document.getElementById('temperature');
+        const humidityElem = document.getElementById('humidity');
+        const powerConsumptionElem = document.getElementById('powerConsumption');
+
+        // Handle connection events
+        socket.on('connect', () => {
+            connectionStatus.textContent = 'Connected';
+            connectionStatus.style.color = 'green';
+        });
+
+        socket.on('disconnect', () => {
+            connectionStatus.textContent = 'Disconnected';
+            connectionStatus.style.color = 'red';
+        });
+
+        // Handle real-time sensor updates
+        socket.on('sensor_update', (data) => {
+            temperatureElem.textContent = data.temperature;
+            humidityElem.textContent = data.humidity;
+            powerConsumptionElem.textContent = data.power_consumption;
+        });
+    </script>
+</body>
+</html>
