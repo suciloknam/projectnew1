@@ -13,7 +13,7 @@ phases:
    pre_build:
     commands:
       -  echo "Installing dependencies..."
-      -  pip install -r projectnew1/requirements.txt
+      -  pip install -r /projectnew1/requirements.txt
    build:
     commands:
       - echo "Running tests..."
